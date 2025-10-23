@@ -1,0 +1,16 @@
+set pi to 3.141592653589793
+
+function fibonacci (num){
+    if (num <= 0){
+        return 0
+    }
+    set count to 2
+    set a to 1
+    set b to 1
+    while (count < num){
+        set b to a + b
+        set a to b - a
+        set count to count + 1
+    }
+    return b
+}

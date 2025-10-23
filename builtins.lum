@@ -1,0 +1,224 @@
+class raw {
+    constructor raw (){
+
+    }
+}
+
+class nullType (raw) {
+    function @stringify (){
+        return "null"
+    }
+
+    function @repr (){
+        return "null"
+    }
+}
+
+class classType {
+    
+}
+
+class functionType {
+    
+}
+
+class moduleNotFoundError (baseError) {
+
+}
+
+class nameError (baseError) {
+
+}
+
+class extensionError (baseError) {
+
+}
+
+class attributeError (baseError) {
+
+}
+
+class typeError (baseError) {
+    
+}
+
+class valuedObject {
+    constructor valuedObject (value){
+        set this.value to value
+    }
+
+    function @stringify (){
+        return nativecode ("str(val)", {"val": this.value})
+    }
+
+    function len (){
+        return new int (nativecode ("len(thisval)", {"thisval": this.value}))
+    }
+}
+
+class int (valuedObject) {
+    constructor int (value){
+        set this.value to nativecode ("int(val)", {"val": value})
+    }
+
+    function @bool (){
+        return new bool (nativecode ("bool(value)", {"value": this.value}))
+    }
+
+    function @equal (other){
+        return new bool (nativecode ("thisval == otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @nequal (other){
+        return new bool (nativecode ("thisval != otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @lequal (other){
+        return new bool (nativecode ("thisval <= otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @lesst (other){
+        return new bool (nativecode ("thisval < otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @greatert (other){
+        return new bool (nativecode ("thisval > otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @gequal (other){
+        return new bool (nativecode ("thisval >= otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @addition (other){
+        if (&other == int){
+            return new int (nativecode ("thisval + otherval", {"thisval": this.value, "otherval": other.value}))
+        }
+        return new float (nativecode ("thisval + otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @division (other){
+        return new float (nativecode ("thisval / otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @subtraction (other){
+        if (&other == int){
+            return new int (nativecode ("thisval - otherval", {"thisval": this.value, "otherval": other.value}))
+        }
+        return new float (nativecode ("thisval - otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @multiplication (other){
+        if (&other == int){
+            return new int (nativecode ("thisval * otherval", {"thisval": this.value, "otherval": other.value}))
+        }
+        return new float (nativecode ("thisval * otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @stringify (){
+        return this.@repr ()
+    }
+
+    function @repr (){
+        return new str (this.value)
+    }
+}
+
+class float (valuedObject) {
+    constructor float (value){
+        set this.value to nativecode ("float(val)", {"val": value})
+    }
+
+    function @addition (other){
+        return new float (nativecode (new str (this.value).value + " + " + other.value))
+    }
+
+    function @division (other){
+        return new float (nativecode (new str (this.value).value + " / " + other.value))
+    }
+
+    function @subtraction (other){
+        return new float (nativecode (new str (this.value).value + " - " + other.value))
+    }
+
+    function @multiplication (other){
+        return new float (nativecode (new str (this.value).value + " * " + other.value))
+    }
+
+    function @equal (other){
+        return new bool (nativecode ("thisval == otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @nequal (other){
+        return new bool (nativecode ("thisval != otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @lequal (other){
+        return new bool (nativecode ("thisval <= otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @lesst (other){
+        return new bool (nativecode ("thisval < otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @greatert (other){
+        return new bool (nativecode ("thisval > otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @gequal (other){
+        return new bool (nativecode ("thisval >= otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @stringify (){
+        return this.@repr ()
+    }
+
+    function @repr (){
+        return new str (this.value)
+    }
+}
+
+class list (dict) {
+    function add (value){
+        this.set (this.len (), value)
+    }
+
+    function @stringify (){
+        set r to "["
+        set i to 0
+        while (i < this.len () - 1){
+            set r to r + this.at (i).@repr () + ", "
+            set i to i + 1
+        }
+        set r to r + this.at (i).@repr () + "]"
+        return r
+    }
+
+    function @repr (){
+        return new str (this)
+    }
+}
+
+function range (start = 0, end, jump = 1){
+    // NOTE: also implement overload
+    set r to []
+    set i to start
+    while (i < end){
+        r.add (i)
+        set i to i + jump
+    }
+    return r
+}
+
+function show (data = "", end = "\n"){
+    nativecode ("print(data, end=str(endchar))", {"data": new str (data), "endchar": end})
+}
+
+function input (prompt = ""){
+    set inpt to new str (nativecode ("input(prompt)", {"prompt": prompt}))
+    return inpt
+}
+
+/*set @file to new str (nativecode ("filename"))
+set true to new bool (1)
+set false to new bool (0)
+set null to new NoneType ()*/
