@@ -129,19 +129,19 @@ class float (valuedObject) {
     }
 
     function @addition (other){
-        return new float (nativecode (new str (this.value).value + " + " + other.value))
+        return new float (nativecode ("thisval + otherval", {"thisval": this.value, "otherval": other.value}))
     }
 
     function @division (other){
-        return new float (nativecode (new str (this.value).value + " / " + other.value))
+        return new float (nativecode ("thisval / otherval", {"thisval": this.value, "otherval": other.value}))
     }
 
     function @subtraction (other){
-        return new float (nativecode (new str (this.value).value + " - " + other.value))
+        return new float (nativecode ("thisval - otherval", {"thisval": this.value, "otherval": other.value}))
     }
 
     function @multiplication (other){
-        return new float (nativecode (new str (this.value).value + " * " + other.value))
+        return new float (nativecode ("thisval * otherval", {"thisval": this.value, "otherval": other.value}))
     }
 
     function @equal (other){
@@ -218,7 +218,7 @@ function input (prompt = ""){
     return inpt
 }
 
-/*set @file to new str (nativecode ("filename"))
+set @file to new str (nativecode ("filename"))
 set true to new bool (1)
 set false to new bool (0)
-set null to new NoneType ()*/
+set null to new NoneType ()
