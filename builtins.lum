@@ -221,4 +221,4 @@ function input (prompt = ""){
 set @file to new str (nativecode ("filename"))
 set true to new bool (1)
 set false to new bool (0)
-set null to new NoneType ()
+set null to new nullType ()
