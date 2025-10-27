@@ -16,13 +16,14 @@ def process(self: LumaTypes.LumaInterpreter, line: str, linenum: int, Object = N
         self.env[varname] = value
         body = ''
         for subline in program.splitlines()[linenum:]:
-            if subline.strip() == '}':
+            if subline[0] == '}':
                 break
             body += self.removetab(subline) + "\n"
         body = body.strip()
         while self.evaluate(counter[1]):
             self.runsubprogram(body, Object, line1=linenum + 1, file=file)
             self.env[varname] = self.evaluate(counter[2])
+        del self.env[varname]
         return True
     return False
 
