@@ -11,6 +11,14 @@ class DictToDict:
     def __getitem__(self, key):
         return self.values[self.keys.index(key)]
     
+class Override:
+    def __init__(self, funcname):
+        self.funcname = funcname
+
+class Overload:
+    def __init__(self, funcname):
+        self.funcname = funcname
+    
 class ParseMe:
     def __init__(self, data: dict):
         self.data = data
