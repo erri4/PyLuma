@@ -1,7 +1,5 @@
 class raw {
-    constructor raw (){
-
-    }
+    constructor raw (){}
 }
 
 class nullType (raw) {
@@ -14,33 +12,19 @@ class nullType (raw) {
     }
 }
 
-class classType {
-    
-}
+class classType {}
 
-class functionType {
-    
-}
+class functionType {}
 
-class moduleNotFoundError (baseError) {
+class moduleNotFoundError (baseError) {}
 
-}
+class nameError (baseError) {}
 
-class nameError (baseError) {
+class extensionError (baseError) {}
 
-}
+class attributeError (baseError) {}
 
-class extensionError (baseError) {
-
-}
-
-class attributeError (baseError) {
-
-}
-
-class typeError (baseError) {
-    
-}
+class typeError (baseError) {}
 
 class valuedObject {
     constructor valuedObject (value){
