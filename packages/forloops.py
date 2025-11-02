@@ -18,7 +18,7 @@ def process(self: LumaTypes.LumaInterpreter, line: str, linenum: int, Object = N
         for subline in program.splitlines()[linenum:]:
             if subline[0] == '}':
                 break
-            body += self.removetab(subline) + "\n"
+            body += subline + "\n"
         body = body.strip()
         while self.evaluate(counter[1]):
             self.runsubprogram(body, Object, line1=linenum + 1, file=file)

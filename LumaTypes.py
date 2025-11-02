@@ -102,6 +102,9 @@ class LumaInterpreter:
     def is_obj_call(expr: str) -> bool: ...
 
     @staticmethod
+    def is_index_call(expr: str) -> bool: ...
+
+    @staticmethod
     def copy_dict(d: dict) -> dict: ...
 
     def evaluate(
