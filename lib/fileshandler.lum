@@ -3,17 +3,17 @@ class file {
         set this.path to path
     }
 
-    function read (){
+    function read(){
         set rdstr to "open(" + packvalue (this.path) + ").read()"
         return nativecode (rdstr)
     }
 
-    function write (newfile){
+    function write(newfile){
         set wrstr to "open(" + packvalue (this.path) + ", 'w').write(" + packvalue (newfile) + ")"
         nativecode (wrstr)
     }
 
-    function writeln (newfile){
+    function writeln(newfile){
         set wrstr to "open(" + packvalue (this.path) + ", 'a').write(" + packvalue ("\n" + newfile) + ")"
         nativecode (wrstr)
     }

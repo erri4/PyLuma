@@ -1,6 +1,6 @@
 set pi to 3.141592653589793
 
-function fibonacci (num){
+function fibonacci(num){
     if (num <= 0){
         return 0
     }

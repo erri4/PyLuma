@@ -74,6 +74,9 @@ class LumaInterpreter:
 
     def splitbyop(self, expr: str) -> list[str]: ...
 
+    @staticmethod
+    def removebracket(string: str) -> str: ...
+
     def extractargs(self, line: str, funcname: str) -> list[EvaluatedType]: ...
 
     @staticmethod
