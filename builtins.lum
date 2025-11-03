@@ -184,13 +184,23 @@ class list (dict) {
     }
 }
 
-function range(start, end, jump = 1){
+function range(start, end = new nullType(), jump = 1){
     // NOTE: also implement overload
+    // do it yourself, user, here take notes:
     set r to []
-    set i to start
-    while (i < end){
-        r.add(i)
-        set i to i + jump
+    if (end == null){
+        set i to 0
+        while (i < start){
+            r.add(i)
+            set i to i + jump
+        }
+    }
+    else {
+        set i to start
+        while (i < end){
+            r.add(i)
+            set i to i + jump
+        }
     }
     return r
 }
