@@ -1,3 +1,5 @@
+class Object {}
+
 class raw {
     constructor raw (){}
 }
