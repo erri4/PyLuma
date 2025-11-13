@@ -15,8 +15,8 @@ class nullType (raw) {
 }
 
 class classType {}
-
 class functionType {}
+// actual types are defined in python
 
 class moduleNotFoundError (baseError) {}
 
@@ -27,6 +27,8 @@ class extensionError (baseError) {}
 class attributeError (baseError) {}
 
 class typeError (baseError) {}
+
+class syntaxError (baseError) {}
 
 class valuedObject {
     constructor valuedObject (value){
@@ -168,15 +170,24 @@ class list (dict) {
         this.set(this.len(), value)
     }
 
+    function delat(index){
+        set i to index
+        while (i + 1 < this.len()){
+            set this[i] to this[i + 1]
+            i++
+        }
+        this.del_(i)
+    }
+
     function @stringify(){
         set r to "["
         set i to 0
         while (i < this.len() - 1){
-            set r to r + this.at(i).@repr() + ", "
-            set i to i + 1
+            r += (this.at(i).@repr() + ", ")
+            i++
         }
         if (i < this.len()){
-            set r to r + this.at(i).@repr()
+            r += this.at(i).@repr()
         }
         return r + "]"
     }
@@ -194,14 +205,14 @@ function range(start, end = new nullType(), jump = 1){
         set i to 0
         while (i < start){
             r.add(i)
-            set i to i + jump
+            i += jump
         }
     }
     else {
         set i to start
         while (i < end){
             r.add(i)
-            set i to i + jump
+            i += jump
         }
     }
     return r
