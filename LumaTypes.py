@@ -112,7 +112,14 @@ class LumaInterpreter:
     ) -> EvaluatedType: ...
 
     class LumaClass:
-        def __init__(self, name: str, parents: list[str] = []): ...
+        actualname: str
+        typename: LiteralString
+        parents: list[str] = ['Object']
+        functions: dict[str, "LumaInterpreter.LumaFunction"]
+        classes: dict[str, "LumaInterpreter.LumaClass"]
+        vars: dict[str, EvaluatedType]
+
+        def __init__(self, name: str, parents: list[str] = ['Object']): ...
 
         def __lbool__(self) -> bool: ...
 
@@ -121,6 +128,8 @@ class LumaInterpreter:
         def __eq__(self, other: "EvaluatedType | LumaInterpreter.LumaClass") -> bool: ...
 
         def call(self, args: list[EvaluatedType]) -> NoReturn: ...
+
+        def store(self, name: str, value: EvaluatedType) -> None: ...
 
         def instance(self, args: list[EvaluatedType]) -> "LumaInterpreter.InstancedLumaObject": ...
 
@@ -145,7 +154,15 @@ class LumaInterpreter:
         def bind_values(self, args: list[EvaluatedType]) -> dict[str, EvaluatedType]: ...
 
     class LumaClassDict(LumaClass):
-        def __init__(self, name: str, parents: list[str] = []): ...
+        def __init__(self, name: str, parents: list[str] = ['Object']): ...
+
+        @staticmethod
+        def lbool(
+            value: "LumaInterpreter.InstancedLumaObject",
+        ) -> "Any | LumaInterpreter.InstancedLumaObject": ...
+
+    class LumaClassBool(LumaClass):
+        def __init__(self, name: str, parents: list[str] = ['Object']): ...
 
         @staticmethod
         def lbool(
@@ -153,9 +170,15 @@ class LumaInterpreter:
         ) -> "Any | LumaInterpreter.InstancedLumaObject": ...
 
     class LumaClassStr(LumaClass):
-        def __init__(self, name: str, parents: list[str] = []): ...
+        def __init__(self, name: str, parents: list[str] = ['Object']): ...
 
     class InstancedLumaObject[ClassName: LiteralString]:
+        typename: LiteralString
+        parents: list[str] = ['Object']
+        functions: dict[str, "LumaInterpreter.LumaFunction"]
+        classes: dict[str, "LumaInterpreter.LumaClass"]
+        vars: dict[str, EvaluatedType]
+
         def __init__(
             self,
             varis: dict[EvaluatedType],

@@ -167,10 +167,10 @@ class float (valuedObject) {
 
 class list (dict) {
     function add(value){
-        this.set(this.len(), value)
+        this.@set(this.len(), value)
     }
 
-    function delat(index){
+    function @del(index){
         set i to index
         while (i + 1 < this.len()){
             set this[i] to this[i + 1]
