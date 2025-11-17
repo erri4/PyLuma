@@ -22,7 +22,7 @@ def process(self: LumaTypes.LumaInterpreter, line: str, linenum: int, Object = N
         body = body.strip()
         while self.evaluate(counter[1]):
             self.runsubprogram(body, Object, line1=linenum + 1, file=file)
-            self.env[varname] = self.evaluate(counter[2])
+            self.evaluate(counter[2])
         del self.env[varname]
         return True
     return False
