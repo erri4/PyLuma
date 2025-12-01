@@ -172,7 +172,7 @@ class list (dict) {
 
     function clear(){
         set i to this.len() - 1
-        while (i >= 0){
+        while (this.len() > 0){
             delete this[i]
             i--
         }
