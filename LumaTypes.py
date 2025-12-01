@@ -5,8 +5,7 @@ EvaluatedType = Union["LumaInterpreter.InstancedLumaObject", int, str, dict]
 
 class LumaInterpreter:
     _instance: "LumaInterpreter"
-    env: "dict[str, EvaluatedType | LumaInterpreter.LumaFunction | LumaInterpreter.LumaClass]"
-    localparams: list[dict[str, EvaluatedType]]
+    localparams: list[dict[str, Union[EvaluatedType, "LumaInterpreter.LumaClass"]]]
     LOGICAL_OPERATORS: list[str]
     OPERATORS: dict[str, str]
     REAL_OPERATORS: dict[str, Callable]

@@ -13,7 +13,7 @@ def process(self: LumaTypes.LumaInterpreter, line: str, linenum: int, Object = N
                 f"cannot assign to '{varname}': saved keyword",
             )
         program = self.scopes[-1]
-        self.env[varname] = value
+        self.localparams[-1][varname] = value
         body = ''
         for subline in program.splitlines()[linenum:]:
             if subline[0] == '}':
@@ -22,8 +22,8 @@ def process(self: LumaTypes.LumaInterpreter, line: str, linenum: int, Object = N
         body = body.strip()
         while self.evaluate(counter[1]):
             self.runsubprogram(body, Object, line1=linenum + 1, file=file)
-            self.evaluate(counter[2])
-        del self.env[varname]
+            self.process(counter[2], linenum)
+        del self.localparams[-1][varname]
         return True
     return False
 
