@@ -170,6 +170,14 @@ class list (dict) {
         this.@set(this.len(), value)
     }
 
+    function clear(){
+        set i to this.len() - 1
+        while (i >= 0){
+            delete this[i]
+            i--
+        }
+    }
+
     function @del(index){
         set i to index
         while (i + 1 < this.len()){
@@ -183,11 +191,11 @@ class list (dict) {
         set r to "["
         set i to 0
         while (i < this.len() - 1){
-            r += (this.at(i).@repr() + ", ")
+            r += (this[i].@repr() + ", ")
             i++
         }
         if (i < this.len()){
-            r += this.at(i).@repr()
+            r += this[i].@repr()
         }
         return r + "]"
     }
@@ -198,8 +206,6 @@ class list (dict) {
 }
 
 function range(start, end = new nullType(), jump = 1){
-    // NOTE: also implement overload
-    // do it yourself, user, here take notes:
     set r to []
     if (end == null){
         set i to 0
