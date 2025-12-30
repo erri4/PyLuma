@@ -1,1 +1,1 @@
-extend lib:@pylibs/lumasys.py
+extend "lib:@pylibs/lumasys.py"
