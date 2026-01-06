@@ -1,6 +1,7 @@
-from LumaExtBundle import Raw
+from LumaExtBundle import Raw, Function
 import os
 import json
+import sys
 
 path = "C:/PyLuma"
 
@@ -20,4 +21,5 @@ LumaExtension = {
         "name": "version",
         "args": [Raw(version)],
     },
+    "exit": Function(sys.exit, []),
 }

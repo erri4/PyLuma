@@ -1,7 +1,8 @@
+from typing import TypedDict, TypeVar
+
 class Raw:
     def __init__(self, data):
         self.data = data
-
 
 class DictToDict:
     def __init__(self, keys: list = [], values: list = []):
@@ -23,7 +24,13 @@ class ParseMe:
     def __init__(self, data: dict):
         self.data = data
 
-def Function(f, args):
+EvaluatedType = TypeVar('EvaluatedType')
+
+class Arg(TypedDict):
+    name: str
+    default: EvaluatedType
+
+def Function(f, args: list[Arg]):
     return {
         "type": "functionType",
         "name": f.__name__,
