@@ -26,14 +26,16 @@ def Context(this = None, ctx: commands.Context = None):
 def send(this=None, msg = None):
     assert msg is not None
     asyncio.create_task(this.ctx.send(str(msg)))
-    
+
+def exit(this=None):
+    this.bot.loop.call_soon_threadsafe(lambda: asyncio.create_task(this.bot.close()))
 
 LumaExtension = {
     "Bot": {
         "type": "classType",
         "name": "Bot",
-        "constructor": Function(constructor, [{'name': 'prefix'}]),
-        "functions": [Function(run, [{'name': 'token'}]), Function(add_command, [{'name': 'name'}, {'name': 'func'}])],
+        "constructor": Function(constructor, [{"name": "this"}, {'name': 'prefix'},]),
+        "functions": [Function(run, [{"name": "this"}, {'name': 'token'}]), Function(add_command, [{"name": "this"}, {'name': 'name'}, {'name': 'func'}]), Function(exit, [{"name": "this"},])],
         "classes": [],
         "vars": [],
         "parent": [],
@@ -41,8 +43,8 @@ LumaExtension = {
     "Context": {
         "type": "classType",
         "name": "Context",
-        "constructor": Function(Context, [{'name': 'ctx'}]),
-        "functions": [Function(send, [{'name': 'msg'}])],
+        "constructor": Function(Context, [{"name": "this"}, {'name': 'ctx'}]),
+        "functions": [Function(send, [{"name": "this"}, {'name': 'msg'}])],
         "classes": [],
         "vars": [],
         "parent": [],
