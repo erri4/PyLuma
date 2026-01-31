@@ -1,10 +1,10 @@
-class Object {}
+class Object{}
 
-class raw {
+class raw{
     constructor raw (){}
 }
 
-class nullType (raw) {
+class nullType (raw){
     function @stringify(){
         return "null"
     }
@@ -14,23 +14,23 @@ class nullType (raw) {
     }
 }
 
-class classType {}
-class functionType {}
+class classType{}
+class functionType{}
 // actual types are defined in python
 
-class moduleNotFoundError (baseError) {}
+class moduleNotFoundError (baseError){}
 
-class nameError (baseError) {}
+class nameError (baseError){}
 
-class extensionError (baseError) {}
+class extensionError (baseError){}
 
-class attributeError (baseError) {}
+class attributeError (baseError){}
 
-class typeError (baseError) {}
+class typeError (baseError){}
 
-class syntaxError (baseError) {}
+class syntaxError (baseError){}
 
-class valuedObject {
+class valuedObject{
     constructor valuedObject (value){
         set this.value to value
     }
@@ -44,7 +44,7 @@ class valuedObject {
     }
 }
 
-class int (valuedObject) {
+class int (valuedObject){
     constructor int (value){
         set this.value to nativecode("int(val)", {"val": value})
     }
@@ -109,9 +109,13 @@ class int (valuedObject) {
     function @repr(){
         return new str(this.value)
     }
+
+    function @int(){
+        return this
+    }
 }
 
-class float (valuedObject) {
+class float (valuedObject){
     constructor float (value){
         set this.value to nativecode("float(val)", {"val": value})
     }
@@ -163,9 +167,13 @@ class float (valuedObject) {
     function @repr(){
         return new str(this.value)
     }
+
+    function @int(){
+        return new int(this.value)
+    }
 }
 
-class list (dict) {
+class list (dict){
     function add(value){
         this.@set(this.len(), value)
     }
