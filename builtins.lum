@@ -16,7 +16,7 @@ class nullType (raw){
 
 class classType{}
 class functionType{}
-// actual types are defined in python
+// Actual types are defined in python
 
 class moduleNotFoundError (baseError){}
 
