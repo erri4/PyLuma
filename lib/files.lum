@@ -1,0 +1,24 @@
+class File{
+    constructor File(path){
+        set this.path to path
+    }
+
+    function read(){
+        set readf to nativecode("open(str(filepath))", {"filepath": this.path})
+        set content to new str(nativecode("file.read()", {"file": readf}))
+        nativecode("file.close()", {"file": readf})
+        return content
+    }
+
+    function write(newfile){
+        set writef to nativecode("open(str(filepath), 'w')", {"filepath": this.path})
+        nativecode("file.write(str(content))", {"file": writef, "content": newfile})
+        nativecode("file.close()", {"file": writef})
+    }
+
+    function writeln(line){
+        set writef to nativecode("open(str(filepath), 'a')", {"filepath": this.path})
+        nativecode("file.write('\n' + str(content))", {"file": writef, "content": line})
+        nativecode("file.close()", {"file": writef})
+    }
+}

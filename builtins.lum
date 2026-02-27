@@ -1,7 +1,7 @@
 class Object{}
 
 class raw{
-    constructor raw (){}
+    constructor raw(){}
 }
 
 class nullType (raw){
@@ -31,7 +31,7 @@ class typeError (baseError){}
 class syntaxError (baseError){}
 
 class valuedObject{
-    constructor valuedObject (value){
+    constructor valuedObject(value){
         set this.value to value
     }
 
@@ -45,7 +45,7 @@ class valuedObject{
 }
 
 class int (valuedObject){
-    constructor int (value){
+    constructor int(value){
         set this.value to nativecode("int(val)", {"val": value})
     }
 
@@ -116,7 +116,7 @@ class int (valuedObject){
 }
 
 class float (valuedObject){
-    constructor float (value){
+    constructor float(value){
         set this.value to nativecode("float(val)", {"val": value})
     }
 
