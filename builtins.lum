@@ -101,6 +101,34 @@ class int (valuedObject){
         }
         return new float(nativecode("thisval * otherval", {"thisval": this.value, "otherval": other.value}))
     }
+    
+    function @modulus(other){
+        if (&other == int){
+            return new int(nativecode("thisval % otherval", {"thisval": this.value, "otherval": other.value}))
+        }
+        return new float(nativecode("thisval % otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @power(other){
+        if (&other == int){
+            return new int(nativecode("thisval ** otherval", {"thisval": this.value, "otherval": other.value}))
+        }
+        return new float(nativecode("thisval ** otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @shift_r(other){
+        if (&other == int){
+            return new int(nativecode("thisval >> otherval", {"thisval": this.value, "otherval": other.value}))
+        }
+        return new float(nativecode("thisval >> otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
+    function @shift_l(other){
+        if (&other == int){
+            return new int(nativecode("thisval << otherval", {"thisval": this.value, "otherval": other.value}))
+        }
+        return new float(nativecode("thisval << otherval", {"thisval": this.value, "otherval": other.value}))
+    }
 
     function @stringify(){
         return this.@repr()

@@ -1,3 +1,4 @@
+from typing import Callable, Any
 import ctypes
 import sys
 import urllib.request
@@ -6,6 +7,9 @@ import os
 import io
 import shutil
 import stat
+import json
+import time
+import subprocess
 
 try:
     import winreg
@@ -14,26 +18,41 @@ try:
 except:
     if os.name == "nt":
         print('please install win32. use `pip install pywin32`')
-        exit()
+        sys.exit()
 
 dest_folder = "C:/PyLuma"
+
+def remove_readonly(func: Callable[..., Any], path: str, exc_info: BaseException):
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
 
 if os.name == "nt":
     dest_folder = "C:/PyLuma"
 elif os.name == "posix":
-    dest_folder = os.path.expanduser("~/PyLuma")
+    import pwd
+    sudo_user = os.environ.get("SUDO_USER")
+    if sudo_user:
+        dest_folder = os.path.join(pwd.getpwnam(sudo_user).pw_dir, 'PyLuma')
+    else:
+        dest_folder = os.path.expanduser("~/PyLuma")
 
 def get_files():
     global dest_folder
+    time.sleep(2)
     url = "https://github.com/Erri4/PyLuma/archive/refs/heads/main.zip"
-
-    if os.path.exists(dest_folder):
-        shutil.rmtree(dest_folder)
-    os.makedirs(dest_folder)
-
+    try:
+        if os.path.exists(dest_folder):
+            if os.name == 'nt':
+                shutil.rmtree(dest_folder, onexc=remove_readonly)
+            elif os.name == "posix":
+                shutil.rmtree(dest_folder)
+        os.makedirs(dest_folder)
+    except Exception as e:
+        print(e)
+        input()
     with urllib.request.urlopen(url) as response:
         zip_data = response.read()
-
+    
     with zipfile.ZipFile(io.BytesIO(zip_data)) as zip_ref:
         for member in zip_ref.namelist():
             filename = "/".join(member.split("/")[1:])
@@ -46,9 +65,52 @@ def get_files():
                 os.makedirs(os.path.dirname(target_path), exist_ok=True)
                 with open(target_path, "wb") as f:
                     f.write(zip_ref.read(member))
-    file_path = os.path.join(dest_folder, "bin/luma" + ".exe" if os.name != "nt" else '')
+    
+    file_path = os.path.join(dest_folder, "bin/luma" + (".exe" if os.name != "nt" else ''))
     if os.path.exists(file_path):
-        os.remove(file_path)
+        try:
+            os.remove(file_path)
+        except Exception as e:
+            print(e, file_path)
+            input()
+    repo = "Erri4/PyLuma"
+
+    url = f"https://api.github.com/repos/{repo}/commits/main"
+
+    with urllib.request.urlopen(url) as response:
+        data = json.load(response)
+
+    commit = data["sha"]
+    jsonpth = os.path.join(dest_folder, "version.json")
+    with open(jsonpth, 'r') as f:
+        version = json.load(f)
+        version['commit'] = commit
+        with open(jsonpth, 'w') as w:
+            json.dump(version, w)
+    if os.name == "posix":
+        current_permissions = os.stat(os.path.join(dest_folder, 'bin', 'luma')).st_mode
+        os.chmod(os.path.join(dest_folder, 'bin', 'luma'), current_permissions | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+
+        current_permissions = os.stat(os.path.join(dest_folder, 'bin', 'luma.bin')).st_mode
+        os.chmod(os.path.join(dest_folder, 'bin', 'luma.bin'), current_permissions | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    else:
+        win32gui.SendMessageTimeout(
+            win32con.HWND_BROADCAST,
+            win32con.WM_SETTINGCHANGE,
+            0,
+            "Environment",
+            win32con.SMTO_ABORTIFHUNG,
+            5000
+        )
+    if os.name == "nt":
+        installer_src = os.path.join(dest_folder, "installer.exe")
+        subprocess.Popen(['luma', '--aptins-internal', installer_src])
+        sys.exit()
+    elif os.name == "posix":
+        installer_src = os.path.join(dest_folder, "installer.bin")
+        subprocess.Popen([os.path.join(dest_folder, 'bin', 'luma'), '--aptins-internal', installer_src])
+        sys.exit()
+        
 
 
 def add_to_PATH(path: str):
@@ -69,32 +131,18 @@ def add_to_PATH(path: str):
 
 def is_admin():
     if os.name == "posix":
-        return True
+        return os.geteuid() == 0
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
         return False
 
 if is_admin():
-    get_files()
     add_to_PATH(dest_folder)
     add_to_PATH(os.path.join(dest_folder, 'bin'))
-    if os.name == "posix":
-        current_permissions = os.stat(os.path.join(dest_folder, 'bin', 'luma')).st_mode
-        os.chmod(os.path.join(dest_folder, 'bin', 'luma'), current_permissions | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
-
-        current_permissions = os.stat(os.path.join(dest_folder, 'bin', 'luma.bin')).st_mode
-        os.chmod(os.path.join(dest_folder, 'bin', 'luma.bin'), current_permissions | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
-
-        exit()
-
-    win32gui.SendMessageTimeout(
-        win32con.HWND_BROADCAST,
-        win32con.WM_SETTINGCHANGE,
-        0,
-        "Environment",
-        win32con.SMTO_ABORTIFHUNG,
-        5000
-    )
+    get_files()
 else:
+    if os.name == "posix":
+        print("please use sudo.")
+        sys.exit()
     ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
