@@ -1,4 +1,4 @@
-set pi to 3.141592653589793
+extend "lib:@pylibs/lumamath.py"
 
 function fibonacci(num){
     if (num <= 0){

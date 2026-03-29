@@ -14,6 +14,10 @@ class nullType (raw){
     }
 }
 
+function repr(obj){
+    return obj.@repr()
+}
+
 class classType{}
 class functionType{}
 // Actual types are defined in python
@@ -131,7 +135,7 @@ class int (valuedObject){
     }
 
     function @stringify(){
-        return this.@repr()
+        return repr(this)
     }
 
     function @repr(){
@@ -139,7 +143,11 @@ class int (valuedObject){
     }
 
     function @int(){
-        return this
+        return new int(this.value)
+    }
+
+    function @float(){
+        return new float(this.value)
     }
 }
 
@@ -188,8 +196,12 @@ class float (valuedObject){
         return new bool(nativecode("thisval >= otherval", {"thisval": this.value, "otherval": other.value}))
     }
 
+    function @power(other){
+        return new float(nativecode("thisval ** otherval", {"thisval": this.value, "otherval": other.value}))
+    }
+
     function @stringify(){
-        return this.@repr()
+        return repr(this)
     }
 
     function @repr(){
@@ -198,6 +210,10 @@ class float (valuedObject){
 
     function @int(){
         return new int(this.value)
+    }
+
+    function @float(){
+        return new float(this.value)
     }
 }
 
@@ -227,11 +243,11 @@ class list (dict){
         set r to "["
         set i to 0
         while (i < this.len() - 1){
-            r += (this[i].@repr() + ", ")
+            r += (repr(this[i]) + ", ")
             i++
         }
         if (i < this.len()){
-            r += this[i].@repr()
+            r += repr(this[i])
         }
         return r + "]"
     }
