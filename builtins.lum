@@ -135,7 +135,7 @@ class int (valuedObject){
     }
 
     function @stringify(){
-        return repr(this)
+        return new str(this.value)
     }
 
     function @repr(){
@@ -201,7 +201,7 @@ class float (valuedObject){
     }
 
     function @stringify(){
-        return repr(this)
+        return new str(this.value)
     }
 
     function @repr(){
