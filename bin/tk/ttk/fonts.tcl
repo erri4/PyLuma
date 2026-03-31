@@ -45,6 +45,9 @@
 #	There does not appear to be any recommendations for fixed-width fonts.
 #
 # X11:
+#	Need a way to tell if Xft is enabled or not.
+#	For now, assume patch #971980 applied.
+#
 #	"Classic" look used Helvetica bold for everything except
 #	for entry widgets, which use Helvetica medium.
 #	Most other toolkits use medium weight for all UI elements,
@@ -128,10 +131,10 @@ switch -- [tk windowingsystem] {
 	    set F(family) "Helvetica"
 	    set F(fixed)  "courier"
 	}
-	set F(size) -12
-	set F(ttsize) -10
-	set F(capsize) -14
-	set F(fixedsize) -12
+	set F(size) 10
+	set F(ttsize) 9
+	set F(capsize) 12
+	set F(fixedsize) 10
 
 	font configure TkDefaultFont -family $F(family) -size $F(size)
 	font configure TkTextFont    -family $F(family) -size $F(size)
