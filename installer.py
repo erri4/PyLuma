@@ -10,6 +10,12 @@ import stat
 import json
 import time
 import subprocess
+import requests
+
+"""
+compile:
+nuitka --follow-imports --standalone --windows-console-mode=force --onefile .\installer.py
+"""
 
 try:
     import winreg
@@ -87,6 +93,7 @@ def get_files():
         version['commit'] = commit
         with open(jsonpth, 'w') as w:
             json.dump(version, w)
+    process_folder(os.path.join(dest_folder, 'bin'))
     if os.name == "posix":
         current_permissions = os.stat(os.path.join(dest_folder, 'bin', 'luma')).st_mode
         os.chmod(os.path.join(dest_folder, 'bin', 'luma'), current_permissions | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
@@ -128,6 +135,68 @@ def add_to_PATH(path: str):
         bashrc = os.path.expanduser("~/.bashrc")
         with open(bashrc, "a") as f:
             f.write(f'\nexport PATH="{path}:$PATH"\n')
+
+def parse_pointer(filepath):
+    with open(filepath, "r") as f:
+        lines = f.readlines()
+
+    oid = None
+    size = None
+
+    for line in lines:
+        if line.startswith("oid sha256:"):
+            oid = line.strip().split(":")[1]
+        elif line.startswith("size"):
+            size = int(line.strip().split()[1])
+
+    return oid, size
+
+
+def download_lfs_file(oid, size, filepath):
+    batch_url = f"https://github.com/Erri4/PyLuma.git/info/lfs/objects/batch"
+
+    headers = {
+        "Accept": "application/vnd.git-lfs+json",
+        "Content-Type": "application/json",
+    }
+
+    data = {
+        "operation": "download",
+        "objects": [{"oid": oid, "size": size}],
+    }
+
+    r = requests.post(batch_url, json=data, headers=headers)
+    r.raise_for_status()
+
+    obj = r.json()["objects"][0]
+    download_url = obj["actions"]["download"]["href"]
+
+    file_data = requests.get(download_url).content
+
+    with open(filepath, "wb") as f:
+        f.write(file_data)
+
+
+
+def is_lfs_pointer(path):
+    try:
+        with open(path, "r") as f:
+            return "git-lfs" in f.readline()
+    except:
+        return False
+
+
+def process_folder(folder):
+    for root, _, files in os.walk(folder):
+        for name in files:
+            path = os.path.join(root, name)
+
+            if is_lfs_pointer(path):
+                print(f"Downloading real file for: {path}")
+
+                oid, size = parse_pointer(path)
+                if oid and size:
+                    download_lfs_file(oid, size, path)
 
 def is_admin():
     if os.name == "posix":
