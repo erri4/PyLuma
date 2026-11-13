@@ -1,0 +1,104 @@
+extend "builtins:@pylibs/lumabool.py"
+extend "builtins:@pylibs/lumadict.py"
+extend "builtins:@pylibs/lumanumbers.py"
+extend "builtins:@pylibs/lumabuiltins.py"
+
+class module{}
+
+class raw{
+    constructor raw(){}
+}
+
+class nullType (raw){
+    function @stringify(){
+        return "null"
+    }
+
+    function @repr(){
+        return "null"
+    }
+}
+
+function repr(obj){
+    return obj.@repr()
+}
+
+//
+class classType{}
+class functionType{}
+// Actual types are defined in python
+
+class moduleNotFoundError (baseError){}
+
+class nameError (baseError){}
+
+class extensionError (baseError){}
+
+class attributeError (baseError){}
+
+class typeError (baseError){}
+
+class syntaxError (baseError){}
+
+class list (dict){
+    function add(value){
+        set this[this.len()] to value
+    }
+
+    function clear(){
+        set i to this.len() - 1
+        while (this.len()){
+            delete this[i]
+            i--
+        }
+    }
+
+    function @del(index){
+        set i to index
+        while (i + 1 < this.len()){
+            set this[i] to this[i + 1]
+            i++
+        }
+        this.del_(i)
+    }
+
+    function @stringify(){
+        set r to "["
+        set i to 0
+        while (i < this.len() - 1){
+            r += (repr(this[i]) + ", ")
+            i++
+        }
+        if (i < this.len()){
+            r += repr(this[i])
+        }
+        return r + "]"
+    }
+
+    function @repr(){
+        return new str(this)
+    }
+}
+
+function range(start, end = new nullType(), jump = 1){
+    set r to []
+    if (end == null){
+        set i to 0
+        while (i < start){
+            r.add(i)
+            i += jump
+        }
+    }
+    else {
+        set i to start
+        while (i < end){
+            r.add(i)
+            i += jump
+        }
+    }
+    return r
+}
+
+set true to new bool(1)
+set false to new bool(0)
+set null to new nullType()
