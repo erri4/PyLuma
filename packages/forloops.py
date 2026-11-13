@@ -20,8 +20,8 @@ def process(self: LumaTypes.LumaInterpreter, line: str, linenum: int, Object = N
     return False
 
 LumaExtension = {
-    "overload": {
-        "type": Overload("process"),
+    "forloops": {
+        "type": Overload("beforeprocess"),
         "function": process
     },
 }

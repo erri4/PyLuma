@@ -72,8 +72,7 @@ def constructor(this: LumaInterpreter.InstancedLumaObject | None = None):
 LumaExtension = {
     "Object": Class(
         "Object",
-        Function(constructor, [{"name": "this"}]),
-        parent=None
+        Function(constructor, [{"name": "this"}])
     ),
     "str": Class(
         "str",
