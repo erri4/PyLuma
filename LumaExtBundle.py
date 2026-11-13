@@ -1,4 +1,5 @@
-from typing import TypedDict, TypeVar
+from typing import TypedDict
+from LumaTypes import EvaluatedType
 
 class Raw:
     def __init__(self, data):
@@ -24,8 +25,6 @@ class ParseMe:
     def __init__(self, data: dict):
         self.data = data
 
-EvaluatedType = TypeVar('EvaluatedType')
-
 class Arg(TypedDict):
     name: str
     default: EvaluatedType
@@ -37,3 +36,14 @@ def Function(f, args: list[Arg]):
         "body": f,
         "args": args,
     }
+
+def Class(c: str, constructor: dict, functions: list[dict] = [], classes: list[dict] = [], vars_: list = [], parent: str | None = 'Object'):
+    return {
+            "type": "classType",
+            "name": c,
+            "constructor": constructor,
+            "functions": functions,
+            "classes": classes,
+            "vars": vars_,
+            "parent": parent,
+        }
